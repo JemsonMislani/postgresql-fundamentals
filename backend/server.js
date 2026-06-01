@@ -15,6 +15,16 @@ const pool = new Pool ({
     port: 5432
 })
 
+// get task from postgres
+app.get('/getTasks', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM tasktodo ORDER BY id ASC');
+        res.json(result.rows)
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Server error')
+    }
+})
 
 const PORT = 3007;
 app.listen(PORT, () => {
