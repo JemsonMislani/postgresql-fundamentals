@@ -26,10 +26,12 @@
 }
 
 .inp {
-    padding: 10px 10px 10px 15px;
-    border-radius: 5px;
-    border: none;
-    background-color: #f5f5f5;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 8px;
+  outline: none;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .inp:hover {

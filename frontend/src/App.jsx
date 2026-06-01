@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export default function App() {
   const [task, setTask] = useState([])
+  const [todo, setTodo] = useState('')
 
 useEffect(() => {
   axios.get('http://localhost:3007/getTasks')
@@ -12,6 +13,16 @@ useEffect(() => {
   .catch(err => console.log(err))
 }, [])
 
+const handleAddTask = () => {
+  axios.post('http://localhost:3007/createTasks', {
+    task: todo, completed: false
+  })
+  .then(result => {
+    setTask(prev => [...prev, result.data])
+    setTodo('')
+  })
+  .catch(err => console.log(err))
+}
 
   return (
     <>
@@ -20,8 +31,11 @@ useEffect(() => {
       <div className='inp-btn'>
         <input 
             className='inp'
-            type="text" placeholder='Input task'/>
+            type="text" placeholder='Input task'
+            value={todo}
+            onChange={(e) => setTodo(e.target.value)}/>
         <button
+          onClick={handleAddTask}
           className='add-btn'>Add task</button>
       </div>
       <div>
