@@ -38,6 +38,19 @@ app.post('/createTasks', async (req, res) => {
     }
 })
 
+// update task from potsgres
+app.put('/updateTasks/:id', async (req, res) => {
+    const {id} = req.params;
+    const {task, completed} = req.body;
+    try {
+        const result = await pool.query('UPDATE tasktodo SET task = $1, completed = $2 WHERE id = $3 RETURNING *', [task, completed, id])
+        res.json(result.rows.length === 0)
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Server error')
+    }
+})
+
 const PORT = 3007;
 app.listen(PORT, () => {
     console.log(`Jem! Your server is running on Port${PORT}`)
