@@ -26,6 +26,18 @@ app.get('/getTasks', async (req, res) => {
     }
 })
 
+// create task, insert it to postgres
+app.post('/createTasks', async (req, res) => {
+    try {
+        const { task, completed } = req.body;
+        const result = await pool.query('INSERT INTO tasktodo (task, completed) VALUES ($1, $2) RETURNING *', [task, completed])
+        res.json(result.rows[0])
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Server error')
+    }
+})
+
 const PORT = 3007;
 app.listen(PORT, () => {
     console.log(`Jem! Your server is running on Port${PORT}`)
