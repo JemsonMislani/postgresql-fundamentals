@@ -51,6 +51,22 @@ app.put('/updateTasks/:id', async (req, res) => {
     }
 })
 
+// delete task from postgres
+app.delete('/deleteTasks/:id', async (req, res) => {
+    const {id} = req.params
+    try {
+        const result = await pool.query('DELETE FROM tasktodo WHERE id = $1 RETURNING *',
+            [id])
+            if(result.rows.length === 0){
+                return res.status(404).json({message: 'No task found'})
+            }
+            res.json({message: 'Task deleted', task: result.rows[0]})
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Server error')
+    }
+})
+
 const PORT = 3007;
 app.listen(PORT, () => {
     console.log(`Jem! Your server is running on Port${PORT}`)
