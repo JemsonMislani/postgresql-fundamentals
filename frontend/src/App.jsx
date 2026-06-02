@@ -16,6 +16,10 @@ useEffect(() => {
 }, [])
 
 const handleAddTask = () => {
+  if(!todo) {
+    alert('please fill out fields!')
+    return
+  }
   axios.post('http://localhost:3007/createTasks', {
     task: todo, completed: false
   })
