@@ -51,6 +51,19 @@ const handleEditedTask = (id) => {
   .catch(err => console.log(err))
 }
 
+const handleCompletedBtn = (id) => {
+  const taskToUpdate = task.find(ttu => ttu.id === id)
+  axios.put('http://localhost:3007/updateTasks/' + id, {
+    task: taskToUpdate.task, completed: !taskToUpdate.completed
+  })
+  .then(result => {
+    setTask(prev => prev.map(td => td.id === id ? 
+      result.data : td
+    ))
+  })
+  .catch(err => console.log(err))
+}
+
   return (
     <>
     <div className="header">
@@ -85,11 +98,15 @@ const handleEditedTask = (id) => {
                   </>)
                   :
                   (<>
-                    <label>
+                    <label style={{
+                      textDecoration: td.completed ? 'line-through' : 'none',
+                      color: td.completed ? 'green' : 'black'
+                    }}>
                       {td.task}
                     </label>
                     <button onClick={() => handleEditBtn(td)}>Edit</button>
-                    <button>Completed</button>
+                    <button 
+                      onClick={() => handleCompletedBtn(td.id)}>{td.completed ? 'Undo task' : 'Completed'}</button>
                     <button>Remove</button> 
                   </>)
                 }
