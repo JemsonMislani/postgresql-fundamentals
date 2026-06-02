@@ -76,8 +76,8 @@ const handleDeleteBtn = (id) => {
   return (
     <>
     <div className="header">
-      <h1 className='header-name'>TODO USING POSTGRES</h1>
-      <div className='inp-btn'>
+      <h1 className='text-3xl font-bold text-center text-gray-800'>'TODO USING POSTGRES'</h1>
+      <div className='inp-btn m-5'>
         <input 
             className='inp'
             type="text" placeholder='Input task'
@@ -85,39 +85,49 @@ const handleDeleteBtn = (id) => {
             onChange={(e) => setTodo(e.target.value)}/>
         <button
           onClick={handleAddTask}
-          className='add-btn'>Add task</button>
+          className='add-btn cursor-pointer'>Add task</button>
       </div>
       <div>
         {
           task.map((td, ind) => {
             return <div 
-              className='todos'
+              className='todos bg-blue-200'
               key={ind}>
                 {
                   findId === td.id ? 
                   (<>
                     <input 
+                      className='border border-gray-500 rounded pl-2'
                       type="text" 
                       value={editTask}
                       onChange={(e) => setEditTask(e.target.value)}/>
                       <button
+                        className='bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'
                         onClick={() => handleEditedTask(td.id)}>save</button>
                       <button
+                        className='bg-red-700 text-white px-4 py-2 rounded cursor-pointer'
                         onClick={() => setFindId(null)}>close</button>
                   </>)
                   :
                   (<>
-                    <label style={{
-                      textDecoration: td.completed ? 'line-through' : 'none',
-                      color: td.completed ? 'green' : 'black'
-                    }}>
+                    <label 
+                      style={{
+                        textDecoration: td.completed ? 'line-through' : 'none',
+                        color: td.completed ? 'green' : 'black'
+                      }}
+                      className='flex justify-center items-center'
+                    >
                       {td.task}
                     </label>
-                    <button onClick={() => handleEditBtn(td)}>Edit</button>
                     <button 
-                      onClick={() => handleCompletedBtn(td.id)}>{td.completed ? 'Undo task' : 'Completed'}</button>
+                      onClick={() => handleEditBtn(td)}
+                      className='bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'>Edit</button>
+                    <button 
+                      onClick={() => handleCompletedBtn(td.id)}
+                      className='bg-green-700 text-white px-2 py-2 rounded cursor-pointer'>{td.completed ? 'Undo task' : 'Completed'}</button>
                     <button
-                      onClick={() => handleDeleteBtn(td.id)}>Remove</button> 
+                      onClick={() => handleDeleteBtn(td.id)}
+                      className='bg-red-700 text-white px-2 py-2 rounded cursor-pointer'>Remove</button> 
                   </>)
                 }
             </div>
