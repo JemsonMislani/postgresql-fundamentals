@@ -64,6 +64,15 @@ const handleCompletedBtn = (id) => {
   .catch(err => console.log(err))
 }
 
+const handleDeleteBtn = (id) => {
+  axios.delete('http://localhost:3007/deleteTasks/' + id)
+  .then(result => {
+    setTask(task.filter(td => td.id !== id))
+    console.log(result)
+  })
+  .catch(err => console.log(err))
+}
+
   return (
     <>
     <div className="header">
@@ -107,7 +116,8 @@ const handleCompletedBtn = (id) => {
                     <button onClick={() => handleEditBtn(td)}>Edit</button>
                     <button 
                       onClick={() => handleCompletedBtn(td.id)}>{td.completed ? 'Undo task' : 'Completed'}</button>
-                    <button>Remove</button> 
+                    <button
+                      onClick={() => handleDeleteBtn(td.id)}>Remove</button> 
                   </>)
                 }
             </div>
