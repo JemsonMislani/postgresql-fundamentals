@@ -6,6 +6,8 @@ import axios from 'axios';
 export default function App() {
   const [task, setTask] = useState([])
   const [todo, setTodo] = useState('')
+  const [findId, setFindId] = useState(null)
+  const [editTask, setEditTask] = useState('')
 
 useEffect(() => {
   axios.get('http://localhost:3007/getTasks')
@@ -22,6 +24,11 @@ const handleAddTask = () => {
     setTodo('')
   })
   .catch(err => console.log(err))
+}
+
+const handleEditBtn = (t) => {
+  setFindId(t.id)
+  setEditTask(t.task)
 }
 
   return (
@@ -44,12 +51,26 @@ const handleAddTask = () => {
             return <div 
               className='todos'
               key={ind}>
-              <label>
-                {td.task}
-              </label>
-              <button>Edit</button>
-              <button>Completed</button>
-              <button>Remove</button>
+                {
+                  findId === td.id ? 
+                  (<>
+                    <input 
+                      type="text" 
+                      value={editTask}
+                      onChange={(e) => setEditTask(e.target.value)}/>
+                      <button>save</button>
+                      <button>close</button>
+                  </>)
+                  :
+                  (<>
+                    <label>
+                      {td.task}
+                    </label>
+                    <button onClick={() => handleEditBtn(td)}>Edit</button>
+                    <button>Completed</button>
+                    <button>Remove</button> 
+                  </>)
+                }
             </div>
           })
         }

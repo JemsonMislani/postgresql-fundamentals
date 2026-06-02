@@ -44,7 +44,10 @@ app.put('/updateTasks/:id', async (req, res) => {
     const {task, completed} = req.body;
     try {
         const result = await pool.query('UPDATE tasktodo SET task = $1, completed = $2 WHERE id = $3 RETURNING *', [task, completed, id])
-        res.json(result.rows.length === 0)
+        if(result.rows.length === 0) {
+            return res.status(404).json({message: 'Task not found'});
+        }
+        res.json(result.rows[0])
     } catch (error) {
         console.error(error.message)
         res.status(500).send('Server error')
