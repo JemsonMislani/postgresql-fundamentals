@@ -31,6 +31,22 @@ const handleEditBtn = (t) => {
   setEditTask(t.task)
 }
 
+const handleEditedTask = (id) => {
+  const taskcompleted = task.find(tc => tc.id === id)
+  axios.put('http://localhost:3007/updateTasks/' + id, {
+    task: editTask, completed: taskcompleted.completed
+  })
+  .then(result => {
+    setTask(prev => prev.map(td => td.id === id
+      ?
+      result.data : td
+    ))
+    setFindId(null)
+    setEditTask('')
+  })
+  .catch(err => console.log(err))
+}
+
   return (
     <>
     <div className="header">
@@ -58,8 +74,10 @@ const handleEditBtn = (t) => {
                       type="text" 
                       value={editTask}
                       onChange={(e) => setEditTask(e.target.value)}/>
-                      <button>save</button>
-                      <button>close</button>
+                      <button
+                        onClick={() => handleEditedTask(td.id)}>save</button>
+                      <button
+                        onClick={() => setFindId(null)}>close</button>
                   </>)
                   :
                   (<>
