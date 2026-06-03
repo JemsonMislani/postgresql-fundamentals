@@ -8,6 +8,11 @@ export default function App() {
   const [todo, setTodo] = useState('')
   const [findId, setFindId] = useState(null)
   const [editTask, setEditTask] = useState('')
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    type: ''
+  })
 
 useEffect(() => {
   axios.get('http://localhost:3007/getTasks')
@@ -67,16 +72,41 @@ const handleCompletedBtn = (id) => {
 const handleDeleteBtn = (id) => {
   axios.delete('http://localhost:3007/deleteTasks/' + id)
   .then(result => {
-    setTask(task.filter(td => td.id !== id))
+    setTask(prev => prev.filter(td => td.id !== id))
     console.log(result)
   })
   .catch(err => console.log(err))
 }
 
+const showToast = (message, type) => {
+  setToast({
+    show: true,
+    message,
+    type
+  })
+
+  setTimeout(() => {
+    setToast({
+      show: false,
+      message: '',
+      type: ''
+    })
+  }, 2000)
+}
+
   return (
     <>
     <div className="header">
-      <h1 className='text-3xl font-bold text-center text-gray-800'>'TODO USING POSTGRES'</h1>
+      {
+        toast.show && (<p className={`toastmessage text-white rounded px-2 ${
+          toast.type === 'success' ? 'bg-green-700 text-white px-2 rounded' 
+          :
+          toast.type === 'error' ? 'bg-red-700 px-2 rounded text-white' : 'bg-blue-700'
+         }`}>
+          {toast.message}
+         </p>)
+      }
+      <h1 className='text-3xl font-bold text-center text-gray-800'>TODO USING POSTGRES</h1>
       <div className='inp-btn m-5'>
         <input 
             className='inp'
@@ -89,10 +119,10 @@ const handleDeleteBtn = (id) => {
       </div>
       <div>
         {
-          task.map((td, ind) => {
+          task.map((td) => {
             return <div 
               className='todos bg-blue-200'
-              key={ind}>
+              key={td.id}>
                 {
                   findId === td.id ? 
                   (<>
@@ -113,9 +143,9 @@ const handleDeleteBtn = (id) => {
                     <label 
                       style={{
                         textDecoration: td.completed ? 'line-through' : 'none',
-                        color: td.completed ? 'green' : 'black'
+                        color: td.completed ? '#585c63' : '#111827'
                       }}
-                      className='flex justify-center items-center'
+                      className='flex items-center'
                     >
                       {td.task}
                     </label>
