@@ -31,6 +31,7 @@ const handleAddTask = () => {
   .then(result => {
     setTask(prev => [...prev, result.data])
     setTodo('')
+    showToast('✅Task Added', 'success')
   })
   .catch(err => console.log(err))
 }
@@ -52,6 +53,7 @@ const handleEditedTask = (id) => {
     ))
     setFindId(null)
     setEditTask('')
+    showToast('✅Task Updated', 'success')
   })
   .catch(err => console.log(err))
 }
@@ -65,6 +67,7 @@ const handleCompletedBtn = (id) => {
     setTask(prev => prev.map(td => td.id === id ? 
       result.data : td
     ))
+    showToast(taskToUpdate.completed ? '✅Task Undo' : '✅Task Completed', 'success')
   })
   .catch(err => console.log(err))
 }
@@ -74,6 +77,7 @@ const handleDeleteBtn = (id) => {
   .then(result => {
     setTask(prev => prev.filter(td => td.id !== id))
     console.log(result)
+    showToast('⛔Task Removed', 'error')
   })
   .catch(err => console.log(err))
 }
